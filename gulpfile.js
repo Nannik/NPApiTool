@@ -8,28 +8,16 @@ function serve() {
         server: "./src"
     });
 
-    gulp.watch("./src/scss/**/*.scss", series(css));
-    gulp.watch("./src/**/*.html", series(html));
-    gulp.watch("./src/**/*.js", series(js));
+    gulp.watch("./src/scss/**/*.scss", series(sass));
+    gulp.watch("./src/**/*.html").on("change", browserSync.reload);
+    gulp.watch("./src/**/*.js").on("change", browserSync.reload);
 }
 
-function css() {
+function sass() {
     return gulp.src("src/scss/*.scss")
-        .pipe(gulpSass().on('error', gulpSass.logError))
-        .pipe(gulp.dest("./dist/css"))
+        .pipe(gulpSass.sync().on('error', gulpSass.logError))
+        .pipe(gulp.dest("./src/css/"))
         .pipe(browserSync.stream());
 }
 
-function js() {
-    return gulp.src("./src/**/*.js")
-        .pipe(gulp.dest("dist/"))
-        .pipe(browserSync.stream());
-}
-
-function html() {
-    return gulp.src("./src/**/*.html")
-        .pipe(gulp.dest("./dist/"))
-        .pipe(browserSync.stream());
-}
-
-exports.default = series(html, css, js, serve);
+exports.default = series(serve);
