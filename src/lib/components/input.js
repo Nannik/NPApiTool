@@ -1,5 +1,8 @@
-export default function (onInput, inputOptions) {
-    const input = $(`<input placeholder="${inputOptions.placeholder}">`);
+export default function (onInput, options) {
+    const input = $(`<input placeholder="${options.placeholder}">`);
+
+    if (options.props)
+        Object.entries(options.props).forEach(prop => input.prop(prop[0], prop[1]));
 
     let timeout
     $(input).on("input", (e) => {

@@ -1,4 +1,5 @@
 import { API_KEY, API_URL } from "./config.js"
+import {postOfficeRef} from "./index.js";
 
 const sendRequest = async (requestData) => {
     try {
@@ -37,7 +38,6 @@ export const getTowns = async (findBy) => {
 export const getDepartments = async (warehouseType, town, findBy) => {
     const requestData = {
         apiKey: API_KEY,
-        TypeOfWarehouseRef: "9a68df70-0267-42a8-bb5c-37f427e36ee4",
         modelName: "Address",
         calledMethod: "getWarehouses",
         methodProperties: {
@@ -46,7 +46,9 @@ export const getDepartments = async (warehouseType, town, findBy) => {
         }
     }
 
-    const data = await sendRequest(requestData);
+    let data = await sendRequest(requestData);
+    if (warehouseType) data = data.filter(e => e.TypeOfWarehouse === warehouseType);
+    else data = data.filter(e => e.TypeOfWarehouse !== postOfficeRef);
 
     return data.map(obj => obj.Description);
 }
