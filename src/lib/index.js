@@ -19,15 +19,14 @@ let selectedWarehouse = "";
 export const updateTowns = async (value) => {
     getTowns(value).then(townsRes => {
         towns = townsRes;
-        fillSelect(townSelect, towns);
+        fillSelect(townSelect, towns.map(e => e.Description));
     });
 }
 
 export const updateDepartments = async (warehouseType, town, findBy) => {
-    console.log(warehouseType)
     getDepartments(warehouseType, town, findBy).then(departmentsRes => {
         departments = departmentsRes;
-        fillSelect(departmentSelect, departments);
+        fillSelect(departmentSelect, departments.map(e => e.Description));
     });
 }
 
@@ -48,23 +47,23 @@ const departmentsInput = createInput(findBy => {
 });
 
 const warehouseTypeSelect = createSelect((value, i) => {
-    selectedWarehouse = warehousesTypes[i].ref;
-    if (townInput.val())
-        updateDepartments(selectedWarehouse, townInput.val(), departmentsInput.val());
+    selectedWarehouse = warehousesTypes[i];
+    if (selectedTown)
+        updateDepartments(selectedWarehouse, selectedTown, departmentsInput.val());
 }, {});
 
-const townSelect = createSelect(value => {
-    selectedTown = value;
+const townSelect = createSelect((value, i) => {
+    selectedTown = towns[i];
     townInput.val(value);
     departmentsInput.prop("disabled", !value);
     departmentSelect.prop("disabled", !value);
-    updateDepartments(selectedWarehouse, value, departmentsInput.val());
+    updateDepartments(selectedWarehouse ? selectedWarehouse : warehousesTypes[1], selectedTown, departmentsInput.val());
 }, {});
 
 const departmentSelect = createSelect(value => {
     selectedDepartment = value;
     departmentsInput.val(value);
-    updateDepartments(selectedWarehouse, selectedTown, value);
+    updateDepartments(selectedWarehouse ? selectedWarehouse : warehousesTypes[1], selectedTown, value);
 }, {
     props: {
         disabled: true
@@ -76,8 +75,8 @@ updateTowns("");
 
 getWarehousesTypes().then(data => {
     warehousesTypes = data;
-    fillSelect(warehouseTypeSelect, warehousesTypes.map(e => e.name));
-    postOfficeRef = data.find(e => e.name === "Поштомат").ref;
+    fillSelect(warehouseTypeSelect, warehousesTypes.map(e => e.Description));
+    postOfficeRef = data.find(e => e.Description === "Поштомат").Ref;
 });
 
 $(document).ready(() => {

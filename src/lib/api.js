@@ -1,5 +1,4 @@
 import { API_KEY, API_URL } from "./config.js"
-import {postOfficeRef} from "./index.js";
 
 const sendRequest = async (requestData) => {
     try {
@@ -20,7 +19,6 @@ const sendRequest = async (requestData) => {
 }
 
 export const getTowns = async (findBy) => {
-
     const requestData = {
         apiKey: API_KEY,
         modelName: "Address",
@@ -32,7 +30,7 @@ export const getTowns = async (findBy) => {
 
     const data = await sendRequest(requestData);
 
-    return [...new Set(data.map(obj => obj.Description))];
+    return data;
 }
 
 export const getDepartments = async (warehouseType, town, findBy) => {
@@ -41,16 +39,17 @@ export const getDepartments = async (warehouseType, town, findBy) => {
         modelName: "Address",
         calledMethod: "getWarehouses",
         methodProperties: {
-            CityName: town,
+            TypeOfWarehouseRef: warehouseType.Ref,
+            CityName: town.Description,
+            SettlementRef: town.Ref,
             FindByString: findBy
         }
     }
 
     let data = await sendRequest(requestData);
-    if (warehouseType) data = data.filter(e => e.TypeOfWarehouse === warehouseType);
-    else data = data.filter(e => e.TypeOfWarehouse !== postOfficeRef);
+    console.log(warehouseType);
 
-    return data.map(obj => obj.Description);
+    return data;
 }
 
 export const getWarehousesTypes = async () => {
@@ -63,5 +62,5 @@ export const getWarehousesTypes = async () => {
 
     const data = await sendRequest(requestData);
 
-    return data.map(obj => { return { name: obj.Description, ref: obj.Ref } });
+    return data;
 }
