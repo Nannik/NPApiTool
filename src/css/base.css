@@ -3,3 +3,29 @@ html, body {
   padding: 0;
   font-size: 35px;
 }
+
+#np {
+  display: flex;
+}
+#np ul {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  font-size: 15px;
+}
+#np ul li {
+  background: #ccc;
+  list-style-type: none;
+  cursor: pointer;
+}
+#np ul li:hover {
+  background: #aaa;
+}
+
+.text-secondary {
+  color: #666;
+}
+
+.hidden {
+  display: none;
+}

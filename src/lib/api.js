@@ -47,7 +47,6 @@ export const getDepartments = async (warehouseType, town, findBy) => {
     }
 
     let data = await sendRequest(requestData);
-    console.log(warehouseType);
 
     return data;
 }

@@ -5,4 +5,31 @@ html, body {
 }
 
 #np {
+  display: flex;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    font-size: 15px;
+
+    li {
+      background: #ccc;
+      list-style-type: none;
+      cursor: pointer;
+
+      &:hover {
+        background: #aaa;
+      }
+    }
+  }
+
+}
+
+.text-secondary {
+  color: #666;
+}
+
+.hidden {
+  display: none;
 }
